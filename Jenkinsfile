@@ -41,7 +41,7 @@ stage('Static analysis') {
   node {
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
       withSonarQubeEnv('sonarqube') {
-        curl "http://localhost:9000"
+        sh 'curl "http://localhost:9000"'
         unstash 'integ-tests'
         unstash 'unit-tests'
         sh "mvn sonar:sonar -DskipTests -Dsonar.host.url=http://localhost:9000"
