@@ -42,7 +42,7 @@ stage('Static analysis') {
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
       withSonarQubeEnv('sonarqube') {
         unstash 'integ-tests'
-        unstash 'unit_tests'
+        unstash 'unit-tests'
         sh "mvn sonar:sonar -DskipTests"
       }
     }
