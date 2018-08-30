@@ -1,4 +1,4 @@
-!groovy
+#!groovy
 
 final FULL_BUILD = params.FULL_BUILD
 
