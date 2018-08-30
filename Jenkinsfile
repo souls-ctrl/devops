@@ -20,8 +20,8 @@ stage('Build') {
 stage('Unit tests') {
   node {
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
-      echo 'Unit test....OK'
-      stash name: "unit-tests"
+      sh "mvn -B clean test"
+      stash name: "unit-tests", includes: "target/surefire-reports/**"
     }
   }
 }
@@ -31,8 +31,8 @@ stage('Unit tests') {
 stage('Integration tests') {
   node {
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
-      echo 'Integration tests....OK'
-      stash name: "integ-tests"
+      sh "mvn -B clean verify -Dsurefire.skip=true"
+      stash name: "integ-tests", includes: "target/failsafe-reports/**"
     }
   }
 }
