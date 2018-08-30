@@ -8,7 +8,6 @@ stage('Build') {
   node {
     git GIT_URL
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
-      echo FULL_BUILD
       if (FULL_BUILD) {
 	echo 'Build....OK'
       }
@@ -17,24 +16,23 @@ stage('Build') {
   }
 }
 
-if (FULL_BUILD) {
-  stage('Unit tests') {
-    node {
-      withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
-	 echo 'Unit test....OK'
-	stash name: "unit-tests"
-      }
+
+stage('Unit tests') {
+  node {
+    withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
+      echo 'Unit test....OK'
+      stash name: "unit-tests"
     }
   }
 }
 
-if (FULL_BUILD) {
-  stage('Integration tests') {
-    node {
-      withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
-	echo 'Integration tests....OK'
-	stash name: "integ-tests"
-      }
+
+
+stage('Integration tests') {
+  node {
+    withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
+      echo 'Integration tests....OK'
+      stash name: "integ-tests"
     }
   }
 }
