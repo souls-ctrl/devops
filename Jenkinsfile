@@ -37,3 +37,15 @@ stage('Integration tests') {
   }
 }
 
+stage('Static analysis') {
+  node {
+    withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
+      withSonarQubeEnv('sonarqube') {
+        unstash 'integ-tests'
+        unstash 'unit_tests'
+        sh "mvn sonar:sonar -DskipTests"
+      }
+    }
+  }
+}
+
