@@ -43,7 +43,7 @@ stage('Static analysis') {
       withSonarQubeEnv('sonarqube') {
         unstash 'integ-tests'
         unstash 'unit-tests'
-        sh "mvn sonar:sonar -DskipTests"
+        sh "mvn sonar:sonar -DskipTests -Dsonar.host.url=http://localhost:9000"
       }
     }
   }
