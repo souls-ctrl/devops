@@ -8,6 +8,7 @@ stage('Build') {
   node {
     git GIT_URL
     withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
+      echo FULL_BUILD
       if (FULL_BUILD) {
 	echo 'Build....OK'
       }
