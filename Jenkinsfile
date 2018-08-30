@@ -30,7 +30,7 @@ if (FULL_BUILD) {
 if (FULL_BUILD) {
   stage('Integration tests') {
     node {
-      withEnv(["PATH+MAVEN=${tool 'maven'}/bin]) {
+      withEnv(["PATH+MAVEN=${tool 'maven'}/bin"]) {
 	sh "echo Integration tests....OK"
 	stash name: "integ-tests"
       }
