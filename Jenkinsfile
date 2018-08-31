@@ -4,7 +4,7 @@
 
 final GIT_URL = 'https://github.com/souls-ctrl/devops.git'
 
-final NEXUS_URL = 'nexus:8081'
+final NEXUS_URL = 'nexus:8081/nexus'
 
 
 stage('Build') {
@@ -70,7 +70,7 @@ stage('Artifact upload') {
       credentialId: 'nexus',
       groupId: "${pom.groupId}",
       nexusUrl: NEXUS_URL,
-      nexusVersion: 'nexus3',
+      nexusVersion: 'nexus2',
       protocol: 'http',
       repository: 'ansible-meetup',
       version: "${pom.version}"
