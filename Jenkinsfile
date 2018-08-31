@@ -4,6 +4,9 @@
 
 final GIT_URL = 'https://github.com/souls-ctrl/devops.git'
 
+final NEXUS_URL = 'nexus.localhost:8081'
+
+
 stage('Build') {
   node {
     git GIT_URL
@@ -47,6 +50,29 @@ stage('Static analysis') {
         sh "echo Analysis static....OK"
       }
     }
+  }
+}
+
+stage('Artifact upload') {
+  node {
+    unstash 'artifact'
+
+    def pom = readMavenPom file: 'pom.xml'
+    def file = "${pom.artifactId}"-"${pom.version}"
+    def jar = "target/${file}.war"
+    sh "cp pom.xml ${file}.pom"
+
+    nexusArifactoryUploader artifacts: [
+        [artifactId: "${pom.artifactId}", classifier: '', file: "target/${file}.war", type: 'war'],
+        [artifactId: "${pom.artifactId}", classifier: '', file: "${file}.pom", type: 'pom']
+      ],
+      credentialId: 'nexus',
+      groupId: "${pom.groupId}",
+      nexusUrl: NEXUS_URL,
+      nexusVersion: 'nexus3',
+      protocol: 'http',
+      repository: 'ansible-meetup',
+      version: "${pom.version}"
   }
 }
 
