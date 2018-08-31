@@ -4,7 +4,7 @@
 
 final GIT_URL = 'https://github.com/souls-ctrl/devops.git'
 
-final NEXUS_URL = 'nexus.nexus'
+final NEXUS_URL = 'nexus'
 
 
 stage('Build') {
@@ -62,7 +62,7 @@ stage('Artifact upload') {
     def jar = "target/${file}.war"
     sh "cp pom.xml ${file}.pom"
 
-    nexusArifactoryUploader artifacts: [
+    nexusArifactUploader artifacts: [
         [artifactId: "${pom.artifactId}", classifier: '', file: "target/${file}.war", type: 'war'],
         [artifactId: "${pom.artifactId}", classifier: '', file: "${file}.pom", type: 'pom']
       ],
