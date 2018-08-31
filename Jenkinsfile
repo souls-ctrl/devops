@@ -67,7 +67,7 @@ stage('Artifact upload') {
         [artifactId: "${pom.artifactId}", classifier: '', file: "target/${file}.war", type: 'war'],
         [artifactId: "${pom.artifactId}", classifier: '', file: "${file}.pom", type: 'pom']
       ],
-      credentialId: 'nexus',
+      credentialsId: 'nexus',
       groupId: "${pom.groupId}",
       nexusUrl: NEXUS_URL,
       nexusVersion: 'nexus2',
