@@ -4,7 +4,7 @@
 
 final GIT_URL = 'https://github.com/souls-ctrl/devops.git'
 
-final NEXUS_URL = 'nexus.localhost:8081'
+final NEXUS_URL = 'nexus.nexus'
 
 
 stage('Build') {
@@ -46,8 +46,8 @@ stage('Static analysis') {
       withSonarQubeEnv('sonarqube') {
         unstash 'integ-tests'
         unstash 'unit-tests'
-        //sh "mvn sonar:sonar -DskipTests -Dsonar.host.url=http://localhost:9000"
-        sh "echo Analysis static....OK"
+        sh "mvn sonar:sonar -DskipTests"
+        // "echo Analysis static....OK"
       }
     }
   }
@@ -73,6 +73,26 @@ stage('Artifact upload') {
       protocol: 'http',
       repository: 'ansible-meetup',
       version: "${pom.version}"
+  }
+}
+
+stage('Deploy') {
+  node {
+    def pom = readMavenPom file: "pom.xml"
+    def repoPath = "${pom.groupId}".replace(".", "/") + "/${pom.artifactId}"
+    def version = pom.version
+    def artifactUrl = "http://${NEXUS_URL}/repository/ansible-meetup/${repoPath}/${version}/${pom.artifactId}-${version}.war"
+    withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=${pom.artifactId}"]) {
+      sh "ansible-galaxy install -vvv -r provision/requirements.xml -p provision/roles/"
+      ansiblePlaybook colorized: true,
+      credentialsId: 'ssh-jenkins',
+      limit: "${HOST_PROVISION}",
+      installation: 'ansible',
+      inventory: 'provision/inventory.ini',
+      playbook: 'provision/playbook.xml',
+      sudo: true,
+      sudoUser: 'jenkins'
+    }
   }
 }
 
