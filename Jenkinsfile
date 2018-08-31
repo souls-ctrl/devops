@@ -62,7 +62,7 @@ stage('Artifact upload') {
     def jar = "target/${file}.war"
     sh "cp pom.xml ${file}.pom"
 
-    nexusArifactUploader artifacts: [
+    nexusArtifactUploader artifacts: [
         [artifactId: "${pom.artifactId}", classifier: '', file: "target/${file}.war", type: 'war'],
         [artifactId: "${pom.artifactId}", classifier: '', file: "${file}.pom", type: 'pom']
       ],
