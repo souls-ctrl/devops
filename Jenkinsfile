@@ -59,6 +59,7 @@ stage('Artifact upload') {
 
     def pom = readMavenPom file: 'pom.xml'
     def file = "${pom.artifactId}"-"${pom.version}"
+    sh "echo '${file}'"
     def jar = "target/${file}.war"
     sh "cp pom.xml ${file}.pom"
 
