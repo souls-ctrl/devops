@@ -4,7 +4,7 @@
 
 final GIT_URL = 'https://github.com/souls-ctrl/devops.git'
 
-final NEXUS_URL = 'nexus'
+final NEXUS_URL = 'nexus:8081'
 
 
 stage('Build') {
@@ -58,7 +58,7 @@ stage('Artifact upload') {
     unstash 'artifact'
 
     def pom = readMavenPom file: 'pom.xml'
-    def file = "${pom.artifactId}"-"${pom.version}"
+    def file = "${pom.artifactId}-${pom.version}"
     sh "echo '${file}'"
     def jar = "target/${file}.war"
     sh "cp pom.xml ${file}.pom"
